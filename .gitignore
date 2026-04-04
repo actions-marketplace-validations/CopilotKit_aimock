@@ -5,3 +5,5 @@ dist/
 .superpowers/
 coverage/
 **/__pycache__/
+packages/.remember/
+packages/.claude/
