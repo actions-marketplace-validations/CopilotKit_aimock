@@ -2,6 +2,7 @@ import { describe, it, expect, afterEach } from "vitest";
 import * as http from "node:http";
 import type { Fixture } from "../types.js";
 import { createServer, type ServerInstance } from "../server.js";
+import { buildBedrockStreamTextEvents } from "../bedrock.js";
 
 // --- helpers ---
 
@@ -502,5 +503,71 @@ describe("POST /api/generate (reasoning streaming)", () => {
 
     const reasoningChunks = chunks.filter((c) => !c.done && c.reasoning_content !== undefined);
     expect(reasoningChunks).toHaveLength(0);
+  });
+});
+
+// ─── Bedrock streaming reasoning: unit test ─────────────────────────────────
+
+describe("buildBedrockStreamTextEvents (reasoning)", () => {
+  it("emits thinking block events before text block events", () => {
+    const events = buildBedrockStreamTextEvents("The answer.", 100, "Step by step.");
+    const types = events.map((e) => e.eventType);
+
+    // messageStart → thinking block → text block → messageStop
+    expect(types[0]).toBe("messageStart");
+
+    // Thinking block at index 0
+    expect(events[1]).toEqual({
+      eventType: "contentBlockStart",
+      payload: { contentBlockIndex: 0, start: { type: "thinking" } },
+    });
+    expect(events[2]).toEqual({
+      eventType: "contentBlockDelta",
+      payload: {
+        contentBlockIndex: 0,
+        delta: { type: "thinking_delta", thinking: "Step by step." },
+      },
+    });
+    expect(events[3]).toEqual({
+      eventType: "contentBlockStop",
+      payload: { contentBlockIndex: 0 },
+    });
+
+    // Text block at index 1
+    expect(events[4]).toEqual({
+      eventType: "contentBlockStart",
+      payload: { contentBlockIndex: 1, start: {} },
+    });
+    expect(events[5]).toEqual({
+      eventType: "contentBlockDelta",
+      payload: {
+        contentBlockIndex: 1,
+        delta: { type: "text_delta", text: "The answer." },
+      },
+    });
+    expect(events[6]).toEqual({
+      eventType: "contentBlockStop",
+      payload: { contentBlockIndex: 1 },
+    });
+
+    expect(events[7]).toEqual({
+      eventType: "messageStop",
+      payload: { stopReason: "end_turn" },
+    });
+  });
+
+  it("no thinking block when reasoning is absent", () => {
+    const events = buildBedrockStreamTextEvents("Hello.", 100);
+    const types = events.map((e) => e.eventType);
+
+    // messageStart → text block at index 0 → messageStop
+    expect(types).toEqual([
+      "messageStart",
+      "contentBlockStart",
+      "contentBlockDelta",
+      "contentBlockStop",
+      "messageStop",
+    ]);
+    expect((events[1].payload as { contentBlockIndex: number }).contentBlockIndex).toBe(0);
   });
 });
