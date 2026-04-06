@@ -167,7 +167,7 @@ function buildOllamaChatTextResponse(content: string, model: string, reasoning?:
     message: {
       role: "assistant",
       content,
-      ...(reasoning !== undefined ? { reasoning_content: reasoning } : {}),
+      ...(reasoning ? { reasoning_content: reasoning } : {}),
     },
     done: true,
     ...DURATION_FIELDS,
@@ -312,7 +312,7 @@ function buildOllamaGenerateTextResponse(
     model,
     created_at: new Date().toISOString(),
     response: content,
-    ...(reasoning !== undefined ? { reasoning_content: reasoning } : {}),
+    ...(reasoning ? { reasoning_content: reasoning } : {}),
     done: true,
     ...DURATION_FIELDS,
     context: [],

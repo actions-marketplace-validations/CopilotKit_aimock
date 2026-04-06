@@ -82,7 +82,7 @@ export function buildTextChunks(
   });
 
   // Reasoning chunks (emitted before content chunks)
-  if (reasoning !== undefined) {
+  if (reasoning) {
     for (let i = 0; i < reasoning.length; i += chunkSize) {
       const slice = reasoning.slice(i, i + chunkSize);
       chunks.push({
@@ -219,7 +219,7 @@ export function buildTextCompletion(
           role: "assistant",
           content,
           refusal: null,
-          ...(reasoning !== undefined ? { reasoning_content: reasoning } : {}),
+          ...(reasoning ? { reasoning_content: reasoning } : {}),
         },
         finish_reason: "stop",
       },
