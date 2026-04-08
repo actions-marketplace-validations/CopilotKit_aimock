@@ -1568,7 +1568,7 @@ describe("collapseOllamaNDJSON with tool_calls", () => {
     expect(result.content).toBeUndefined();
   });
 
-  it("returns toolCalls (not content) when both tool_calls and text are present", () => {
+  it("preserves both content and toolCalls when both tool_calls and text are present", () => {
     const body = [
       JSON.stringify({
         model: "llama3",
@@ -1594,11 +1594,11 @@ describe("collapseOllamaNDJSON with tool_calls", () => {
     ].join("\n");
 
     const result = collapseOllamaNDJSON(body);
-    // When toolCalls are present, they take priority over content
+    // When toolCalls are present alongside content, both are preserved
     expect(result.toolCalls).toBeDefined();
     expect(result.toolCalls).toHaveLength(1);
     expect(result.toolCalls![0].name).toBe("get_weather");
-    expect(result.content).toBeUndefined();
+    expect(result.content).toBe("Let me check the weather.");
   });
 
   it("extracts multiple tool_calls across chunks", () => {
