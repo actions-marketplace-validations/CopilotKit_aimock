@@ -93,6 +93,15 @@ export interface ToolCallResponse {
   finishReason?: string;
 }
 
+export interface ContentWithToolCallsResponse {
+  content: string;
+  toolCalls: ToolCall[];
+  reasoning?: string;
+  webSearches?: string[];
+  role?: string;
+  finishReason?: string;
+}
+
 export interface ErrorResponse {
   error: { message: string; type?: string; code?: string };
   status?: number;
@@ -102,7 +111,12 @@ export interface EmbeddingResponse {
   embedding: number[];
 }
 
-export type FixtureResponse = TextResponse | ToolCallResponse | ErrorResponse | EmbeddingResponse;
+export type FixtureResponse =
+  | TextResponse
+  | ToolCallResponse
+  | ContentWithToolCallsResponse
+  | ErrorResponse
+  | EmbeddingResponse;
 
 // Streaming physics
 
