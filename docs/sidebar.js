@@ -193,7 +193,11 @@
 
   // ─── Inject into DOM ────────────────────────────────────────────
   var sidebarEl = document.getElementById("sidebar");
-  if (sidebarEl) sidebarEl.innerHTML = buildSidebar();
+  if (sidebarEl) {
+    sidebarEl.innerHTML = buildSidebar();
+    var active = sidebarEl.querySelector(".active");
+    if (active) active.scrollIntoView({ block: "center" });
+  }
 
   var sectionBarEl = document.getElementById("section-bar");
   if (sectionBarEl) sectionBarEl.innerHTML = buildSectionBar();
