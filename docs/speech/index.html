@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text-to-Speech — aimock</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <nav class="top-nav">
+      <div class="nav-inner">
+        <div style="display: flex; align-items: center; gap: 1rem">
+          <button
+            class="sidebar-toggle"
+            onclick="document.querySelector('.sidebar').classList.toggle('open')"
+            aria-label="Toggle sidebar"
+          >
+            &#9776;
+          </button>
+          <a href="/" class="nav-brand"> <span class="prompt">$</span> aimock </a>
+        </div>
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/docs" style="color: var(--accent)">Docs</a></li>
+          <li>
+            <a href="https://github.com/CopilotKit/aimock" class="gh-link" target="_blank"
+              ><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path
+                  d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+                />
+              </svg>
+              GitHub</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="docs-layout">
+      <aside class="sidebar" id="sidebar"></aside>
+
+      <main class="docs-content">
+        <h1>Text-to-Speech</h1>
+        <p class="lead">
+          The <code>POST /v1/audio/speech</code> endpoint returns audio data from text input.
+          Supports multiple output formats including mp3, opus, aac, flac, wav, and pcm.
+        </p>
+
+        <h2>Endpoint</h2>
+        <table class="endpoint-table">
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Path</th>
+              <th>Format</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>POST</td>
+              <td>/v1/audio/speech</td>
+              <td>JSON request, binary/base64 response</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Unit Test: Basic Speech</h2>
+        <p>
+          Using the programmatic API with vitest, register a fixture and assert on the response.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header">speech-basic.test.ts <span class="lang-tag">ts</span></div>
+          <pre><code><span class="kw">import</span> { <span class="type">LLMock</span> } <span class="kw">from</span> <span class="str">"@copilotkit/aimock"</span>;
+<span class="kw">import</span> { <span class="fn">describe</span>, <span class="fn">it</span>, <span class="fn">expect</span>, <span class="fn">beforeAll</span>, <span class="fn">afterAll</span> } <span class="kw">from</span> <span class="str">"vitest"</span>;
+
+<span class="kw">let</span> <span class="op">mock</span>: <span class="type">LLMock</span>;
+
+<span class="fn">beforeAll</span>(<span class="kw">async</span> () <span class="kw">=&gt;</span> {
+  <span class="op">mock</span> = <span class="kw">new</span> <span class="type">LLMock</span>();
+  <span class="kw">await</span> <span class="op">mock</span>.<span class="fn">start</span>();
+});
+
+<span class="fn">afterAll</span>(<span class="kw">async</span> () <span class="kw">=&gt;</span> {
+  <span class="kw">await</span> <span class="op">mock</span>.<span class="fn">stop</span>();
+});
+
+<span class="fn">it</span>(<span class="str">"returns audio for text input"</span>, <span class="kw">async</span> () <span class="kw">=&gt;</span> {
+  <span class="op">mock</span>.<span class="fn">onSpeech</span>(<span class="str">"Hello world"</span>, { <span class="prop">audio</span>: <span class="str">"SGVsbG8gd29ybGQ="</span> });
+
+  <span class="kw">const</span> <span class="op">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">`${mock.url}/v1/audio/speech`</span>, {
+    <span class="prop">method</span>: <span class="str">"POST"</span>,
+    <span class="prop">headers</span>: { <span class="str">"Content-Type"</span>: <span class="str">"application/json"</span> },
+    <span class="prop">body</span>: <span class="type">JSON</span>.<span class="fn">stringify</span>({
+      <span class="prop">model</span>: <span class="str">"tts-1"</span>,
+      <span class="prop">input</span>: <span class="str">"Hello world"</span>,
+      <span class="prop">voice</span>: <span class="str">"alloy"</span>,
+    }),
+  });
+
+  <span class="fn">expect</span>(<span class="op">res</span>.<span class="prop">ok</span>).<span class="fn">toBe</span>(<span class="kw">true</span>);
+  <span class="kw">const</span> <span class="op">body</span> = <span class="kw">await</span> <span class="op">res</span>.<span class="fn">json</span>();
+  <span class="fn">expect</span>(<span class="op">body</span>.<span class="prop">audio</span>).<span class="fn">toBe</span>(<span class="str">"SGVsbG8gd29ybGQ="</span>);
+});</code></pre>
+        </div>
+
+        <h2>Format Options</h2>
+        <p>
+          The <code>response_format</code> field in the request controls the audio output format.
+          Supported values:
+        </p>
+        <table class="endpoint-table">
+          <thead>
+            <tr>
+              <th>Format</th>
+              <th>Content-Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>mp3</td>
+              <td>audio/mpeg</td>
+              <td>Default format, widely supported</td>
+            </tr>
+            <tr>
+              <td>opus</td>
+              <td>audio/opus</td>
+              <td>Low latency, good for streaming</td>
+            </tr>
+            <tr>
+              <td>aac</td>
+              <td>audio/aac</td>
+              <td>Preferred for mobile devices</td>
+            </tr>
+            <tr>
+              <td>flac</td>
+              <td>audio/flac</td>
+              <td>Lossless compression</td>
+            </tr>
+            <tr>
+              <td>wav</td>
+              <td>audio/wav</td>
+              <td>Uncompressed, no decoding overhead</td>
+            </tr>
+            <tr>
+              <td>pcm</td>
+              <td>audio/pcm</td>
+              <td>Raw samples, 24kHz 16-bit signed little-endian</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>JSON Fixture</h2>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            fixtures/speech.json <span class="lang-tag">json</span>
+          </div>
+          <pre><code>{
+  <span class="key">"fixtures"</span>: [
+    {
+      <span class="key">"match"</span>: { <span class="key">"userMessage"</span>: <span class="str">"Hello world"</span> },
+      <span class="key">"response"</span>: {
+        <span class="key">"audio"</span>: <span class="str">"SGVsbG8gd29ybGQ="</span>
+      }
+    }
+  ]
+}</code></pre>
+        </div>
+
+        <h2>Response Format</h2>
+        <p>Returns audio data matching the requested format:</p>
+        <ul>
+          <li><code>audio</code> &mdash; base64-encoded audio data in the fixture response</li>
+        </ul>
+
+        <div class="info-box">
+          <p>
+            Speech fixtures use <code>match.userMessage</code> which maps to the
+            <code>input</code> field in the request body. The matcher checks for substring matches
+            on the text to be spoken.
+          </p>
+        </div>
+
+        <h2>Record &amp; Replay</h2>
+        <p>
+          When no fixture matches an incoming request, aimock can proxy it to the real API and
+          record the response as a fixture for future replays. Enable recording with the
+          <code>--record</code> flag or via <code>RecordConfig</code> in the programmatic API.
+          Binary audio from the provider is base64-encoded in the recorded fixture, with the format
+          derived from the response <code>Content-Type</code> header (e.g.
+          <code>audio/mpeg</code> for mp3). Subsequent requests replay the cached audio without
+          hitting the real API.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header">CLI <span class="lang-tag">sh</span></div>
+          <pre><code>npx aimock --record --provider-openai https://api.openai.com</code></pre>
+        </div>
+      </main>
+      <aside class="page-toc" id="page-toc"></aside>
+    </div>
+    <footer class="docs-footer">
+      <div class="footer-inner">
+        <div class="footer-left"><span>$</span> aimock &middot; MIT License</div>
+        <ul class="footer-links">
+          <li><a href="https://github.com/CopilotKit/aimock" target="_blank">GitHub</a></li>
+          <li>
+            <a href="https://www.npmjs.com/package/@copilotkit/aimock" target="_blank">npm</a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+    <script src="../sidebar.js"></script>
+    <script src="../cli-tabs.js"></script>
+  </body>
+</html>

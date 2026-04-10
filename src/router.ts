@@ -1,4 +1,10 @@
 import type { ChatCompletionRequest, ChatMessage, ContentPart, Fixture } from "./types.js";
+import {
+  isImageResponse,
+  isAudioResponse,
+  isTranscriptionResponse,
+  isVideoResponse,
+} from "./helpers.js";
 
 export function getLastMessageByRole(messages: ChatMessage[], role: string): ChatMessage | null {
   for (let i = messages.length - 1; i >= 0; i--) {
@@ -39,6 +45,26 @@ export function matchFixture(
     // predicate — if present, must return true (receives original request)
     if (match.predicate !== undefined) {
       if (!match.predicate(req)) continue;
+    }
+
+    // endpoint — bidirectional filtering:
+    // 1. If fixture has endpoint set, only match requests of that type
+    // 2. If request has _endpointType but fixture doesn't, skip fixtures
+    //    whose response type is incompatible (prevents generic chat fixtures
+    //    from matching image/speech/video requests and causing 500s)
+    const reqEndpoint = effective._endpointType as string | undefined;
+    if (match.endpoint !== undefined) {
+      if (match.endpoint !== reqEndpoint) continue;
+    } else if (reqEndpoint && reqEndpoint !== "chat" && reqEndpoint !== "embedding") {
+      // Fixture has no endpoint restriction but request is multimedia —
+      // only match if the response type is compatible
+      const r = fixture.response;
+      const compatible =
+        (reqEndpoint === "image" && isImageResponse(r)) ||
+        (reqEndpoint === "speech" && isAudioResponse(r)) ||
+        (reqEndpoint === "transcription" && isTranscriptionResponse(r)) ||
+        (reqEndpoint === "video" && isVideoResponse(r));
+      if (!compatible) continue;
     }
 
     // userMessage — match against the last user message content

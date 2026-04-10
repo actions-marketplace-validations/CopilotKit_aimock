@@ -1,5 +1,18 @@
 # @copilotkit/aimock
 
+## 1.12.0
+
+### Minor Changes
+
+- Multimedia endpoint support: image generation (OpenAI DALL-E + Gemini Imagen), text-to-speech, audio transcription, and video generation with async polling (#101)
+- `match.endpoint` field for fixture isolation — prevents cross-matching between chat, image, speech, transcription, video, and embedding fixtures (#101)
+- Bidirectional endpoint filtering — generic fixtures only match compatible endpoint types (#101)
+- Convenience methods: `onImage`, `onSpeech`, `onTranscription`, `onVideo` (#101)
+- Record & replay for all multimedia endpoints — proxy to real APIs, save fixtures with correct format/type detection (#101)
+- `_endpointType` explicit field on `ChatCompletionRequest` for type safety (#101)
+- Comparison matrix and drift detection rules updated for multimedia (#101)
+- 54 new tests (32 integration, 11 record/replay, 12 type/routing)
+
 ## 1.11.0
 
 ### Minor Changes

@@ -2,7 +2,7 @@
 
 https://github.com/user-attachments/assets/646bf106-0320-41f2-a9b1-5090454830f3
 
-Mock infrastructure for AI application testing — LLM APIs, MCP tools, A2A agents, AG-UI event streams, vector databases, search, rerank, and moderation. One package, one port, zero dependencies.
+Mock infrastructure for AI application testing — LLM APIs, image generation, text-to-speech, transcription, video generation, MCP tools, A2A agents, AG-UI event streams, vector databases, search, rerank, and moderation. One package, one port, zero dependencies.
 
 ## Quick Start
 
@@ -43,6 +43,7 @@ Run them all on one port with `npx aimock --config aimock.json`, or use the prog
 
 - **[Record & Replay](https://aimock.copilotkit.dev/record-replay)** — Proxy real APIs, save as fixtures, replay deterministically forever
 - **[11 LLM Providers](https://aimock.copilotkit.dev/docs)** — OpenAI, Claude, Gemini, Bedrock, Azure, Vertex AI, Ollama, Cohere — full streaming support
+- **[Multimedia APIs](https://aimock.copilotkit.dev/images)** — Image generation (DALL-E, Imagen), text-to-speech, audio transcription, video generation
 - **[MCP / A2A / AG-UI / Vector](https://aimock.copilotkit.dev/mcp-mock)** — Mock every protocol your AI agents use
 - **[Chaos Testing](https://aimock.copilotkit.dev/chaos-testing)** — 500 errors, malformed JSON, mid-stream disconnects at any probability
 - **[Drift Detection](https://aimock.copilotkit.dev/drift-detection)** — Daily CI validation against real APIs
