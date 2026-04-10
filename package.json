@@ -1,6 +1,6 @@
 {
   "name": "@copilotkit/aimock",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "Mock infrastructure for AI application testing — LLM APIs, MCP tools, A2A agents, AG-UI event streams, vector databases, search, and more. Zero dependencies.",
   "license": "MIT",
   "repository": {
