@@ -27,6 +27,15 @@
       ],
     },
     {
+      title: "Multimedia",
+      links: [
+        { label: "Image Generation", href: "/images" },
+        { label: "Text-to-Speech", href: "/speech" },
+        { label: "Audio Transcription", href: "/transcription" },
+        { label: "Video Generation", href: "/video" },
+      ],
+    },
+    {
       title: "LLM Features",
       links: [
         { label: "Embeddings", href: "/embeddings" },

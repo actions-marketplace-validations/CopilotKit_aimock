@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Audio Transcription — aimock</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <nav class="top-nav">
+      <div class="nav-inner">
+        <div style="display: flex; align-items: center; gap: 1rem">
+          <button
+            class="sidebar-toggle"
+            onclick="document.querySelector('.sidebar').classList.toggle('open')"
+            aria-label="Toggle sidebar"
+          >
+            &#9776;
+          </button>
+          <a href="/" class="nav-brand"> <span class="prompt">$</span> aimock </a>
+        </div>
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/docs" style="color: var(--accent)">Docs</a></li>
+          <li>
+            <a href="https://github.com/CopilotKit/aimock" class="gh-link" target="_blank"
+              ><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path
+                  d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+                />
+              </svg>
+              GitHub</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="docs-layout">
+      <aside class="sidebar" id="sidebar"></aside>
+
+      <main class="docs-content">
+        <h1>Audio Transcription</h1>
+        <p class="lead">
+          The <code>POST /v1/audio/transcriptions</code> endpoint accepts multipart form-data audio
+          uploads and returns transcribed text. Supports both simple and verbose response formats
+          with word-level timestamps and segments.
+        </p>
+
+        <h2>Endpoint</h2>
+        <table class="endpoint-table">
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Path</th>
+              <th>Format</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>POST</td>
+              <td>/v1/audio/transcriptions</td>
+              <td>Multipart form-data request, JSON response</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Unit Test: Simple Transcription</h2>
+        <p>
+          Using the programmatic API with vitest, register a fixture and assert on the response.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            transcription-simple.test.ts <span class="lang-tag">ts</span>
+          </div>
+          <pre><code><span class="kw">import</span> { <span class="type">LLMock</span> } <span class="kw">from</span> <span class="str">"@copilotkit/aimock"</span>;
+<span class="kw">import</span> { <span class="fn">describe</span>, <span class="fn">it</span>, <span class="fn">expect</span>, <span class="fn">beforeAll</span>, <span class="fn">afterAll</span> } <span class="kw">from</span> <span class="str">"vitest"</span>;
+
+<span class="kw">let</span> <span class="op">mock</span>: <span class="type">LLMock</span>;
+
+<span class="fn">beforeAll</span>(<span class="kw">async</span> () <span class="kw">=&gt;</span> {
+  <span class="op">mock</span> = <span class="kw">new</span> <span class="type">LLMock</span>();
+  <span class="kw">await</span> <span class="op">mock</span>.<span class="fn">start</span>();
+});
+
+<span class="fn">afterAll</span>(<span class="kw">async</span> () <span class="kw">=&gt;</span> {
+  <span class="kw">await</span> <span class="op">mock</span>.<span class="fn">stop</span>();
+});
+
+<span class="fn">it</span>(<span class="str">"returns simple transcription text"</span>, <span class="kw">async</span> () <span class="kw">=&gt;</span> {
+  <span class="op">mock</span>.<span class="fn">onTranscription</span>(<span class="str">"audio.mp3"</span>, {
+    <span class="prop">transcription</span>: { <span class="prop">text</span>: <span class="str">"Hello, how are you today?"</span> },
+  });
+
+  <span class="kw">const</span> <span class="op">form</span> = <span class="kw">new</span> <span class="type">FormData</span>();
+  <span class="op">form</span>.<span class="fn">append</span>(<span class="str">"file"</span>, <span class="kw">new</span> <span class="type">Blob</span>([<span class="str">"fake-audio"</span>]), <span class="str">"audio.mp3"</span>);
+  <span class="op">form</span>.<span class="fn">append</span>(<span class="str">"model"</span>, <span class="str">"whisper-1"</span>);
+
+  <span class="kw">const</span> <span class="op">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">`${mock.url}/v1/audio/transcriptions`</span>, {
+    <span class="prop">method</span>: <span class="str">"POST"</span>,
+    <span class="prop">body</span>: <span class="op">form</span>,
+  });
+
+  <span class="kw">const</span> <span class="op">body</span> = <span class="kw">await</span> <span class="op">res</span>.<span class="fn">json</span>();
+  <span class="fn">expect</span>(<span class="op">body</span>.<span class="prop">text</span>).<span class="fn">toBe</span>(<span class="str">"Hello, how are you today?"</span>);
+});</code></pre>
+        </div>
+
+        <h2>Unit Test: Verbose Response with Segments</h2>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            transcription-verbose.test.ts <span class="lang-tag">ts</span>
+          </div>
+          <pre><code><span class="fn">it</span>(<span class="str">"returns verbose transcription with words and segments"</span>, <span class="kw">async</span> () <span class="kw">=&gt;</span> {
+  <span class="op">mock</span>.<span class="fn">onTranscription</span>(<span class="str">"meeting.wav"</span>, {
+    <span class="prop">transcription</span>: {
+      <span class="prop">text</span>: <span class="str">"Welcome to the meeting."</span>,
+      <span class="prop">words</span>: [
+        { <span class="prop">word</span>: <span class="str">"Welcome"</span>, <span class="prop">start</span>: <span class="num">0.0</span>, <span class="prop">end</span>: <span class="num">0.5</span> },
+        { <span class="prop">word</span>: <span class="str">"to"</span>, <span class="prop">start</span>: <span class="num">0.5</span>, <span class="prop">end</span>: <span class="num">0.7</span> },
+        { <span class="prop">word</span>: <span class="str">"the"</span>, <span class="prop">start</span>: <span class="num">0.7</span>, <span class="prop">end</span>: <span class="num">0.9</span> },
+        { <span class="prop">word</span>: <span class="str">"meeting"</span>, <span class="prop">start</span>: <span class="num">0.9</span>, <span class="prop">end</span>: <span class="num">1.4</span> },
+      ],
+      <span class="prop">segments</span>: [
+        { <span class="prop">id</span>: <span class="num">0</span>, <span class="prop">text</span>: <span class="str">"Welcome to the meeting."</span>, <span class="prop">start</span>: <span class="num">0.0</span>, <span class="prop">end</span>: <span class="num">1.4</span> },
+      ],
+    },
+  });
+
+  <span class="kw">const</span> <span class="op">form</span> = <span class="kw">new</span> <span class="type">FormData</span>();
+  <span class="op">form</span>.<span class="fn">append</span>(<span class="str">"file"</span>, <span class="kw">new</span> <span class="type">Blob</span>([<span class="str">"fake-audio"</span>]), <span class="str">"meeting.wav"</span>);
+  <span class="op">form</span>.<span class="fn">append</span>(<span class="str">"model"</span>, <span class="str">"whisper-1"</span>);
+  <span class="op">form</span>.<span class="fn">append</span>(<span class="str">"response_format"</span>, <span class="str">"verbose_json"</span>);
+  <span class="op">form</span>.<span class="fn">append</span>(<span class="str">"timestamp_granularities[]"</span>, <span class="str">"word"</span>);
+  <span class="op">form</span>.<span class="fn">append</span>(<span class="str">"timestamp_granularities[]"</span>, <span class="str">"segment"</span>);
+
+  <span class="kw">const</span> <span class="op">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">`${mock.url}/v1/audio/transcriptions`</span>, {
+    <span class="prop">method</span>: <span class="str">"POST"</span>,
+    <span class="prop">body</span>: <span class="op">form</span>,
+  });
+
+  <span class="kw">const</span> <span class="op">body</span> = <span class="kw">await</span> <span class="op">res</span>.<span class="fn">json</span>();
+  <span class="fn">expect</span>(<span class="op">body</span>.<span class="prop">text</span>).<span class="fn">toBe</span>(<span class="str">"Welcome to the meeting."</span>);
+  <span class="fn">expect</span>(<span class="op">body</span>.<span class="prop">words</span>).<span class="fn">toHaveLength</span>(<span class="num">4</span>);
+  <span class="fn">expect</span>(<span class="op">body</span>.<span class="prop">segments</span>).<span class="fn">toHaveLength</span>(<span class="num">1</span>);
+});</code></pre>
+        </div>
+
+        <h2>JSON Fixture</h2>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            fixtures/transcription.json <span class="lang-tag">json</span>
+          </div>
+          <pre><code>{
+  <span class="key">"fixtures"</span>: [
+    {
+      <span class="key">"match"</span>: { <span class="key">"userMessage"</span>: <span class="str">"audio.mp3"</span> },
+      <span class="key">"response"</span>: {
+        <span class="key">"transcription"</span>: {
+          <span class="key">"text"</span>: <span class="str">"Hello, how are you today?"</span>
+        }
+      }
+    }
+  ]
+}</code></pre>
+        </div>
+
+        <h2>Response Format</h2>
+        <p>Matches the OpenAI <code>/v1/audio/transcriptions</code> response format:</p>
+
+        <h3>Simple (default)</h3>
+        <ul>
+          <li><code>text</code> &mdash; the transcribed text</li>
+        </ul>
+
+        <h3>Verbose (response_format: "verbose_json")</h3>
+        <ul>
+          <li><code>text</code> &mdash; the full transcribed text</li>
+          <li><code>task</code> &mdash; <code>"transcribe"</code></li>
+          <li><code>language</code> &mdash; detected language code</li>
+          <li><code>duration</code> &mdash; audio duration in seconds</li>
+          <li>
+            <code>words[]</code> &mdash; word-level timestamps with <code>word</code>,
+            <code>start</code>, <code>end</code>
+          </li>
+          <li>
+            <code>segments[]</code> &mdash; segment-level data with <code>id</code>,
+            <code>text</code>, <code>start</code>, <code>end</code>
+          </li>
+        </ul>
+
+        <div class="info-box">
+          <p>
+            Transcription requests use multipart form-data. The fixture
+            <code>match.userMessage</code> maps to the uploaded filename. This allows matching
+            different fixtures based on which audio file is submitted.
+          </p>
+        </div>
+
+        <h2>Record &amp; Replay</h2>
+        <p>
+          When no fixture matches an incoming request, aimock can proxy it to the real API and
+          record the response as a fixture for future replays. Enable recording with the
+          <code>--record</code> flag or via <code>RecordConfig</code> in the programmatic API.
+          Recorded transcription fixtures preserve the full response including <code>text</code>,
+          <code>language</code>, <code>duration</code>, <code>words</code>, and
+          <code>segments</code>, so verbose-mode responses replay with complete word-level
+          timestamps intact.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header">CLI <span class="lang-tag">sh</span></div>
+          <pre><code>npx aimock --record --provider-openai https://api.openai.com</code></pre>
+        </div>
+      </main>
+      <aside class="page-toc" id="page-toc"></aside>
+    </div>
+    <footer class="docs-footer">
+      <div class="footer-inner">
+        <div class="footer-left"><span>$</span> aimock &middot; MIT License</div>
+        <ul class="footer-links">
+          <li><a href="https://github.com/CopilotKit/aimock" target="_blank">GitHub</a></li>
+          <li>
+            <a href="https://www.npmjs.com/package/@copilotkit/aimock" target="_blank">npm</a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+    <script src="../sidebar.js"></script>
+    <script src="../cli-tabs.js"></script>
+  </body>
+</html>

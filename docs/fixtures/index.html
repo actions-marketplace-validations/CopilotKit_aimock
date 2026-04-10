@@ -162,6 +162,26 @@
               <td>embedding[]</td>
               <td>Vector of numbers</td>
             </tr>
+            <tr>
+              <td>Image</td>
+              <td>image.url or images[].url</td>
+              <td>Generated image URL(s) or base64 data</td>
+            </tr>
+            <tr>
+              <td>Speech</td>
+              <td>audio</td>
+              <td>Base64-encoded audio data</td>
+            </tr>
+            <tr>
+              <td>Transcription</td>
+              <td>transcription.text, words?, segments?</td>
+              <td>Transcribed text with optional timestamps</td>
+            </tr>
+            <tr>
+              <td>Video</td>
+              <td>video.url, video.duration?</td>
+              <td>Generated video URL with async polling</td>
+            </tr>
           </tbody>
         </table>
 
@@ -239,6 +259,10 @@
 <span class="op">mock</span>.<span class="fn">onMessage</span>(<span class="str">"hello"</span>, { <span class="prop">content</span>: <span class="str">"Hi!"</span> });
 <span class="op">mock</span>.<span class="fn">onToolCall</span>(<span class="str">"get_weather"</span>, { <span class="prop">content</span>: <span class="str">"72F"</span> });
 <span class="op">mock</span>.<span class="fn">onEmbedding</span>(<span class="str">"my text"</span>, { <span class="prop">embedding</span>: [<span class="num">0.1</span>, <span class="num">0.2</span>] });
+<span class="op">mock</span>.<span class="fn">onImage</span>(<span class="str">"sunset"</span>, { <span class="prop">image</span>: { <span class="prop">url</span>: <span class="str">"https://example.com/sunset.png"</span> } });
+<span class="op">mock</span>.<span class="fn">onSpeech</span>(<span class="str">"hello"</span>, { <span class="prop">audio</span>: <span class="str">"SGVsbG8="</span> });
+<span class="op">mock</span>.<span class="fn">onTranscription</span>(<span class="str">"audio.mp3"</span>, { <span class="prop">transcription</span>: { <span class="prop">text</span>: <span class="str">"Hello"</span> } });
+<span class="op">mock</span>.<span class="fn">onVideo</span>(<span class="str">"cats"</span>, { <span class="prop">video</span>: { <span class="prop">url</span>: <span class="str">"https://example.com/cats.mp4"</span> } });
 <span class="op">mock</span>.<span class="fn">onJsonOutput</span>(<span class="str">"data"</span>, { <span class="prop">key</span>: <span class="str">"value"</span> });
 <span class="op">mock</span>.<span class="fn">onToolResult</span>(<span class="str">"call_123"</span>, { <span class="prop">content</span>: <span class="str">"Done"</span> });
 

@@ -73,6 +73,22 @@ const FEATURE_RULES: FeatureRule[] = [
     keywords: ["embedding", "/v1/embeddings", "embed"],
   },
   {
+    rowLabel: "Image generation",
+    keywords: ["image", "dall-e", "dalle", "/v1/images", "image generation", "imagen"],
+  },
+  {
+    rowLabel: "Text-to-Speech",
+    keywords: ["tts", "text-to-speech", "speech", "/v1/audio/speech", "audio generation"],
+  },
+  {
+    rowLabel: "Audio transcription",
+    keywords: ["transcription", "whisper", "/v1/audio/transcriptions", "speech-to-text", "stt"],
+  },
+  {
+    rowLabel: "Video generation",
+    keywords: ["video", "sora", "/v1/videos", "video generation"],
+  },
+  {
     rowLabel: "Structured output / JSON mode",
     keywords: ["json_object", "json_schema", "structured output", "response_format"],
   },
