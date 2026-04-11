@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "aimock-pytest"
 version = "0.3.0"
-description = "pytest fixtures for aimock — mock LLM APIs, MCP, A2A, vector DBs"
+description = "pytest fixtures for aimock — mock LLM APIs, multimedia, MCP, A2A, AG-UI, vector DBs, and more"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
