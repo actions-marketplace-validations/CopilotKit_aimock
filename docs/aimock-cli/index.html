@@ -49,43 +49,9 @@
       <main class="docs-content">
         <h1>aimock CLI</h1>
         <p class="lead">
-          <code>aimock</code> is the full-stack mock orchestrator. Where <code>llmock</code> serves
-          LLM endpoints only, <code>aimock</code> reads a JSON config file and serves LLM mocks
-          alongside additional mock services (MCP, A2A, vector stores) on a single port.
+          Configure all your mocks in one JSON file and serve them on a single port &mdash; LLM
+          providers, MCP, A2A, AG-UI, vector databases, and services.
         </p>
-
-        <h2>aimock vs llmock</h2>
-        <table class="endpoint-table">
-          <thead>
-            <tr>
-              <th>Capability</th>
-              <th>llmock CLI</th>
-              <th>aimock CLI</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>LLM mock endpoints</td>
-              <td>Yes</td>
-              <td>Yes</td>
-            </tr>
-            <tr>
-              <td>Additional mock services</td>
-              <td>No</td>
-              <td>Yes (via mount)</td>
-            </tr>
-            <tr>
-              <td>Config file</td>
-              <td>CLI flags only</td>
-              <td>JSON config file</td>
-            </tr>
-            <tr>
-              <td>Single-port routing</td>
-              <td>LLM paths only</td>
-              <td>All services on one port</td>
-            </tr>
-          </tbody>
-        </table>
 
         <h2>Quick Start</h2>
 
