@@ -78,7 +78,7 @@
                 aimock (equivalent)
                 <span class="lang-tag">shell</span>
               </div>
-              <pre><code>npx aimock -p 4010 -f ./fixtures</code></pre>
+              <pre><code>npx @copilotkit/aimock -p 4010 -f ./fixtures</code></pre>
             </div>
           </div>
           <div class="tab-docker">
@@ -90,7 +90,7 @@
               <pre><code>docker run -d -p 4010:4010 \
   -v ./fixtures:/fixtures \
   ghcr.io/copilotkit/aimock \
-  npx aimock -p 4010 -f /fixtures</code></pre>
+  npx @copilotkit/aimock -p 4010 -f /fixtures</code></pre>
             </div>
           </div>
         </div>
@@ -287,7 +287,7 @@
                 <span class="lang-tag">shell</span>
               </div>
               <pre><code><span class="cm"># Run the mock server</span>
-npx aimock -p 4010 -f ./fixtures
+npx @copilotkit/aimock -p 4010 -f ./fixtures
 
 <span class="cm"># Point your app at it</span>
 <span class="kw">export</span> OPENAI_BASE_URL=http://localhost:4010/v1
@@ -300,7 +300,7 @@ npx aimock -p 4010 -f ./fixtures
                 <span class="lang-tag">shell</span>
               </div>
               <pre><code><span class="cm"># Full config-driven setup (LLM + MCP + A2A + AG-UI on one port)</span>
-npx aimock --config aimock.json --port 4010</code></pre>
+npx @copilotkit/aimock --config aimock.json --port 4010</code></pre>
             </div>
           </div>
 

@@ -7,7 +7,7 @@
  *   npx tsx scripts/convert-mockllm.ts <input.yaml> [output.json]
  *
  * Core logic lives in src/convert-mockllm.ts — this script is a thin CLI
- * wrapper. Prefer `npx aimock convert mockllm` instead.
+ * wrapper. Prefer `npx @copilotkit/aimock convert mockllm` instead.
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
