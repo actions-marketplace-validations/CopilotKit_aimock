@@ -56,12 +56,16 @@
 
         <h2>Quick Start</h2>
         <p>
-          MAF's OpenAI provider wraps the official <code>openai</code> Python SDK. Point it at
-          aimock and every call goes through your fixtures instead of the real API.
+          MAF wraps standard provider SDKs. Point them at aimock and every call goes through your
+          fixtures instead of the real API.
         </p>
-        <div class="code-block">
-          <div class="code-block-header">Minimal setup <span class="lang-tag">python</span></div>
-          <pre><code><span class="kw">from</span> agent_framework <span class="kw">import</span> Agent, AgentRuntime
+        <div class="code-tabs" data-sync="lang">
+          <div data-tab="python">
+            <div class="code-block">
+              <div class="code-block-header">
+                Minimal setup <span class="lang-tag">python</span>
+              </div>
+              <pre><code><span class="kw">from</span> agent_framework <span class="kw">import</span> Agent, AgentRuntime
 <span class="kw">from</span> agent_framework_openai <span class="kw">import</span> OpenAIChatClient
 <span class="kw">import</span> asyncio
 
@@ -85,6 +89,33 @@ agent = Agent(
     print(response)
 
 asyncio.run(main())</code></pre>
+            </div>
+          </div>
+          <div data-tab="dotnet">
+            <div class="code-block">
+              <div class="code-block-header">
+                Minimal setup <span class="lang-tag">csharp</span>
+              </div>
+              <pre><code><span class="kw">using</span> <span class="type">Microsoft.Extensions.AI</span>;
+<span class="kw">using</span> <span class="type">OpenAI</span>;
+
+<span class="cm">// Start aimock first: npx @copilotkit/aimock --fixtures ./fixtures</span>
+<span class="kw">var</span> openaiClient = <span class="kw">new</span> <span class="type">OpenAIClient</span>(
+    <span class="kw">new</span> <span class="type">ApiKeyCredential</span>(<span class="str">"test"</span>),
+    <span class="kw">new</span> <span class="type">OpenAIClientOptions</span>
+    {
+        Endpoint = <span class="kw">new</span> <span class="type">Uri</span>(<span class="str">"http://localhost:4010/v1"</span>)
+    }
+);
+
+<span class="kw">var</span> agent = openaiClient
+    .<span class="fn">GetChatClient</span>(<span class="str">"gpt-4o"</span>)
+    .<span class="fn">AsIChatClient</span>();
+
+<span class="kw">var</span> response = <span class="kw">await</span> agent.<span class="fn">GetResponseAsync</span>(<span class="str">"What are the latest AI testing frameworks?"</span>);
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(response.Text);</code></pre>
+            </div>
+          </div>
         </div>
         <p>
           This works with any MAF provider that wraps an OpenAI-compatible API. For Azure OpenAI,
@@ -103,11 +134,13 @@ asyncio.run(main())</code></pre>
           For Claude-backed agents, inject a pre-configured Anthropic client. Note that aimock
           serves the Claude Messages API at the root path, not under <code>/v1</code>.
         </p>
-        <div class="code-block">
-          <div class="code-block-header">
-            Anthropic provider setup <span class="lang-tag">python</span>
-          </div>
-          <pre><code><span class="kw">from</span> anthropic <span class="kw">import</span> AsyncAnthropic
+        <div class="code-tabs" data-sync="lang">
+          <div data-tab="python">
+            <div class="code-block">
+              <div class="code-block-header">
+                Anthropic provider setup <span class="lang-tag">python</span>
+              </div>
+              <pre><code><span class="kw">from</span> anthropic <span class="kw">import</span> AsyncAnthropic
 <span class="kw">from</span> agent_framework_anthropic <span class="kw">import</span> AnthropicClient
 
 anthropic_client = AsyncAnthropic(
@@ -119,6 +152,21 @@ client = AnthropicClient(
     model=<span class="str">"claude-sonnet-4-20250514"</span>,
     anthropic_client=anthropic_client,
 )</code></pre>
+            </div>
+          </div>
+          <div data-tab="dotnet">
+            <div class="code-block">
+              <div class="code-block-header">
+                Anthropic provider setup <span class="lang-tag">csharp</span>
+              </div>
+              <pre><code><span class="kw">using</span> <span class="type">Anthropic</span>;
+
+<span class="kw">var</span> client = <span class="kw">new</span> <span class="type">AnthropicClient</span>(<span class="kw">new</span> <span class="type">APIAuthentication</span>(<span class="str">"test"</span>))
+{
+    BaseUrl = <span class="str">"http://localhost:4010"</span>
+};</code></pre>
+            </div>
+          </div>
         </div>
         <p>
           Pass this <code>client</code> as the <code>model_client</code> parameter when creating
@@ -131,13 +179,25 @@ client = AnthropicClient(
           The <code>aimock-pytest</code> plugin starts and stops the server automatically per test,
           so you never need to manage a background process.
         </p>
-        <div class="code-block">
-          <div class="code-block-header">Install <span class="lang-tag">shell</span></div>
-          <pre><code>pip install aimock-pytest</code></pre>
+        <div class="code-tabs" data-sync="lang">
+          <div data-tab="python">
+            <div class="code-block">
+              <div class="code-block-header">Install <span class="lang-tag">shell</span></div>
+              <pre><code>pip install aimock-pytest</code></pre>
+            </div>
+          </div>
+          <div data-tab="dotnet">
+            <div class="code-block">
+              <div class="code-block-header">Install <span class="lang-tag">shell</span></div>
+              <pre><code>dotnet add package Microsoft.Extensions.AI</code></pre>
+            </div>
+          </div>
         </div>
-        <div class="code-block">
-          <div class="code-block-header">conftest.py <span class="lang-tag">python</span></div>
-          <pre><code><span class="kw">import</span> os, pytest
+        <div class="code-tabs" data-sync="lang">
+          <div data-tab="python">
+            <div class="code-block">
+              <div class="code-block-header">conftest.py <span class="lang-tag">python</span></div>
+              <pre><code><span class="kw">import</span> os, pytest
 
 @pytest.fixture(autouse=<span class="kw">True</span>)
 <span class="kw">def</span> <span class="fn">mock_llm</span>(aimock):
@@ -148,10 +208,12 @@ client = AnthropicClient(
     os.environ[<span class="str">"OPENAI_API_KEY"</span>] = <span class="str">"test"</span>
     aimock.load_fixtures(<span class="str">"./fixtures/maf-agents.json"</span>)
     <span class="kw">yield</span> aimock</code></pre>
-        </div>
-        <div class="code-block">
-          <div class="code-block-header">test_agent.py <span class="lang-tag">python</span></div>
-          <pre><code><span class="kw">from</span> agent_framework <span class="kw">import</span> Agent, AgentRuntime
+            </div>
+            <div class="code-block">
+              <div class="code-block-header">
+                test_agent.py <span class="lang-tag">python</span>
+              </div>
+              <pre><code><span class="kw">from</span> agent_framework <span class="kw">import</span> Agent, AgentRuntime
 <span class="kw">from</span> agent_framework_openai <span class="kw">import</span> OpenAIChatClient
 
 <span class="kw">import</span> pytest
@@ -172,6 +234,62 @@ client = AnthropicClient(
     runtime.register(agent)
     response = <span class="kw">await</span> runtime.send_message(agent, <span class="str">"Summarize recent AI breakthroughs"</span>)
     <span class="kw">assert</span> <span class="str">"AI"</span> <span class="kw">in</span> str(response)</code></pre>
+            </div>
+          </div>
+          <div data-tab="dotnet">
+            <div class="code-block">
+              <div class="code-block-header">
+                AgentTests.cs <span class="lang-tag">csharp</span>
+              </div>
+              <pre><code><span class="kw">using</span> <span class="type">Microsoft.Extensions.AI</span>;
+<span class="kw">using</span> <span class="type">OpenAI</span>;
+<span class="kw">using</span> <span class="type">Xunit</span>;
+
+<span class="kw">public class</span> <span class="type">AgentTests</span> : <span class="type">IAsyncLifetime</span>
+{
+    <span class="kw">private</span> <span class="type">Process</span>? _aimock;
+
+    <span class="kw">public</span> <span class="type">Task</span> <span class="fn">InitializeAsync</span>()
+    {
+        _aimock = <span class="type">Process</span>.<span class="fn">Start</span>(<span class="kw">new</span> <span class="type">ProcessStartInfo</span>
+        {
+            FileName = <span class="str">"npx"</span>,
+            Arguments = <span class="str">"@copilotkit/aimock --fixtures ./fixtures"</span>,
+            RedirectStandardOutput = <span class="kw">true</span>,
+        });
+        <span class="kw">return</span> <span class="type">Task</span>.<span class="fn">Delay</span>(<span class="num">1000</span>); <span class="cm">// wait for server startup</span>
+    }
+
+    <span class="kw">public</span> <span class="type">Task</span> <span class="fn">DisposeAsync</span>()
+    {
+        _aimock?.<span class="fn">Kill</span>();
+        <span class="kw">return</span> <span class="type">Task</span>.CompletedTask;
+    }
+
+    [Fact]
+    <span class="kw">public async</span> <span class="type">Task</span> <span class="fn">ResearcherAgent_ReturnsFixtureResponse</span>()
+    {
+        <span class="kw">var</span> openaiClient = <span class="kw">new</span> <span class="type">OpenAIClient</span>(
+            <span class="kw">new</span> <span class="type">ApiKeyCredential</span>(<span class="str">"test"</span>),
+            <span class="kw">new</span> <span class="type">OpenAIClientOptions</span>
+            {
+                Endpoint = <span class="kw">new</span> <span class="type">Uri</span>(<span class="str">"http://localhost:4010/v1"</span>)
+            }
+        );
+
+        <span class="kw">var</span> agent = openaiClient
+            .<span class="fn">GetChatClient</span>(<span class="str">"gpt-4o"</span>)
+            .<span class="fn">AsIChatClient</span>();
+
+        <span class="kw">var</span> response = <span class="kw">await</span> agent.<span class="fn">GetResponseAsync</span>(
+            <span class="str">"Summarize recent AI breakthroughs"</span>
+        );
+
+        <span class="type">Assert</span>.<span class="fn">Contains</span>(<span class="str">"AI"</span>, response.Text);
+    }
+}</code></pre>
+            </div>
+          </div>
         </div>
 
         <h2>Multi-Agent Workflows</h2>
@@ -202,11 +320,13 @@ client = AnthropicClient(
   ]
 }</code></pre>
         </div>
-        <div class="code-block">
-          <div class="code-block-header">
-            Two-agent workflow <span class="lang-tag">python</span>
-          </div>
-          <pre><code><span class="kw">import</span> asyncio
+        <div class="code-tabs" data-sync="lang">
+          <div data-tab="python">
+            <div class="code-block">
+              <div class="code-block-header">
+                Two-agent workflow <span class="lang-tag">python</span>
+              </div>
+              <pre><code><span class="kw">import</span> asyncio
 <span class="kw">from</span> agent_framework <span class="kw">import</span> Agent, AgentRuntime
 <span class="kw">from</span> agent_framework_openai <span class="kw">import</span> OpenAIChatClient
 
@@ -238,6 +358,39 @@ summarizer = Agent(
     print(summary)
 
 asyncio.run(main())</code></pre>
+            </div>
+          </div>
+          <div data-tab="dotnet">
+            <div class="code-block">
+              <div class="code-block-header">
+                Two-agent workflow <span class="lang-tag">csharp</span>
+              </div>
+              <pre><code><span class="kw">using</span> <span class="type">Microsoft.Extensions.AI</span>;
+<span class="kw">using</span> <span class="type">OpenAI</span>;
+
+<span class="kw">var</span> openaiClient = <span class="kw">new</span> <span class="type">OpenAIClient</span>(
+    <span class="kw">new</span> <span class="type">ApiKeyCredential</span>(<span class="str">"test"</span>),
+    <span class="kw">new</span> <span class="type">OpenAIClientOptions</span>
+    {
+        Endpoint = <span class="kw">new</span> <span class="type">Uri</span>(<span class="str">"http://localhost:4010/v1"</span>)
+    }
+);
+
+<span class="kw">var</span> agent = openaiClient
+    .<span class="fn">GetChatClient</span>(<span class="str">"gpt-4o"</span>)
+    .<span class="fn">AsIChatClient</span>();
+
+<span class="kw">var</span> research = <span class="kw">await</span> agent.<span class="fn">GetResponseAsync</span>(
+    <span class="str">"Research LLM testing best practices"</span>
+);
+
+<span class="kw">var</span> summary = <span class="kw">await</span> agent.<span class="fn">GetResponseAsync</span>(
+    $<span class="str">"Summarize the following findings: {research.Text}"</span>
+);
+
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(summary.Text);</code></pre>
+            </div>
+          </div>
         </div>
         <p>
           The researcher's prompt contains "research", matching the first fixture. The summarizer's
@@ -278,9 +431,13 @@ asyncio.run(main())</code></pre>
   ]
 }</code></pre>
         </div>
-        <div class="code-block">
-          <div class="code-block-header">Agent with tools <span class="lang-tag">python</span></div>
-          <pre><code><span class="kw">import</span> asyncio
+        <div class="code-tabs" data-sync="lang">
+          <div data-tab="python">
+            <div class="code-block">
+              <div class="code-block-header">
+                Agent with tools <span class="lang-tag">python</span>
+              </div>
+              <pre><code><span class="kw">import</span> asyncio
 <span class="kw">from</span> agent_framework <span class="kw">import</span> Agent, AgentRuntime, FunctionTool
 <span class="kw">from</span> agent_framework_openai <span class="kw">import</span> OpenAIChatClient
 
@@ -308,6 +465,37 @@ researcher = Agent(
     print(result)
 
 asyncio.run(main())</code></pre>
+            </div>
+          </div>
+          <div data-tab="dotnet">
+            <div class="code-block">
+              <div class="code-block-header">
+                Agent with tools <span class="lang-tag">csharp</span>
+              </div>
+              <pre><code><span class="kw">using</span> <span class="type">Microsoft.Extensions.AI</span>;
+<span class="kw">using</span> <span class="type">OpenAI</span>;
+
+<span class="kw">var</span> openaiClient = <span class="kw">new</span> <span class="type">OpenAIClient</span>(
+    <span class="kw">new</span> <span class="type">ApiKeyCredential</span>(<span class="str">"test"</span>),
+    <span class="kw">new</span> <span class="type">OpenAIClientOptions</span>
+    {
+        Endpoint = <span class="kw">new</span> <span class="type">Uri</span>(<span class="str">"http://localhost:4010/v1"</span>)
+    }
+);
+
+<span class="kw">var</span> agent = openaiClient
+    .<span class="fn">GetChatClient</span>(<span class="str">"gpt-4o"</span>)
+    .<span class="fn">AsIChatClient</span>();
+
+<span class="cm">// aimock returns tool call fixtures — the client processes them</span>
+<span class="cm">// just like real OpenAI tool call responses</span>
+<span class="kw">var</span> response = <span class="kw">await</span> agent.<span class="fn">GetResponseAsync</span>(
+    <span class="str">"Search for the latest LLM testing frameworks"</span>
+);
+
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(response.Text);</code></pre>
+            </div>
+          </div>
         </div>
         <p>
           The first fixture triggers the tool call. After MAF processes the tool result and sends it
@@ -320,11 +508,13 @@ asyncio.run(main())</code></pre>
           Use the <code>CopilotKit/aimock</code> GitHub Action to run aimock as a background service
           in your CI pipeline.
         </p>
-        <div class="code-block">
-          <div class="code-block-header">
-            .github/workflows/test.yml <span class="lang-tag">yaml</span>
-          </div>
-          <pre><code><span class="prop">name</span>: Test MAF Agents
+        <div class="code-tabs" data-sync="lang">
+          <div data-tab="python">
+            <div class="code-block">
+              <div class="code-block-header">
+                .github/workflows/test.yml <span class="lang-tag">yaml</span>
+              </div>
+              <pre><code><span class="prop">name</span>: Test MAF Agents
 <span class="prop">on</span>: [push, pull_request]
 <span class="prop">jobs</span>:
   <span class="prop">test</span>:
@@ -342,6 +532,32 @@ asyncio.run(main())</code></pre>
         <span class="prop">env</span>:
           <span class="prop">OPENAI_BASE_URL</span>: http://127.0.0.1:4010/v1
           <span class="prop">OPENAI_API_KEY</span>: test</code></pre>
+            </div>
+          </div>
+          <div data-tab="dotnet">
+            <div class="code-block">
+              <div class="code-block-header">
+                .github/workflows/test.yml <span class="lang-tag">yaml</span>
+              </div>
+              <pre><code><span class="prop">name</span>: Test MAF Agents
+<span class="prop">on</span>: [push, pull_request]
+<span class="prop">jobs</span>:
+  <span class="prop">test</span>:
+    <span class="prop">runs-on</span>: ubuntu-latest
+    <span class="prop">steps</span>:
+      - <span class="prop">uses</span>: actions/checkout@v4
+      - <span class="prop">uses</span>: actions/setup-dotnet@v4
+        <span class="prop">with</span>:
+          <span class="prop">dotnet-version</span>: <span class="str">"8.0"</span>
+      - <span class="prop">uses</span>: CopilotKit/aimock@v1
+        <span class="prop">with</span>:
+          <span class="prop">fixtures</span>: ./fixtures
+      - <span class="prop">run</span>: dotnet test
+        <span class="prop">env</span>:
+          <span class="prop">OPENAI_BASE_URL</span>: http://127.0.0.1:4010/v1
+          <span class="prop">OPENAI_API_KEY</span>: test</code></pre>
+            </div>
+          </div>
         </div>
         <p>
           The action starts aimock on port 4010, loads your fixtures, and keeps the server running
@@ -391,5 +607,6 @@ python agent.py
       </div>
     </footer>
     <script src="../sidebar.js"></script>
+    <script src="../cli-tabs.js"></script>
   </body>
 </html>
