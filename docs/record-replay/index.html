@@ -89,7 +89,7 @@
               <div class="code-block-header">
                 Proxy-only mode <span class="lang-tag">shell</span>
               </div>
-              <pre><code>$ npx aimock --fixtures ./fixtures \
+              <pre><code>$ npx @copilotkit/aimock --fixtures ./fixtures \
   --proxy-only \
   --provider-openai https://api.openai.com</code></pre>
             </div>
@@ -102,7 +102,7 @@
               <pre><code>$ docker run -d -p 4010:4010 \
   -v ./fixtures:/fixtures \
   ghcr.io/copilotkit/aimock \
-  npx aimock -f /fixtures \
+  npx @copilotkit/aimock -f /fixtures \
   --proxy-only \
   --provider-openai https://api.openai.com</code></pre>
             </div>
@@ -140,7 +140,7 @@
           <div class="tab-cli">
             <div class="code-block">
               <div class="code-block-header">CLI usage <span class="lang-tag">shell</span></div>
-              <pre><code>$ npx aimock --fixtures ./fixtures \
+              <pre><code>$ npx @copilotkit/aimock --fixtures ./fixtures \
   --record \
   --provider-openai https://api.openai.com \
   --provider-anthropic https://api.anthropic.com</code></pre>
@@ -152,7 +152,7 @@
               <pre><code>$ docker run -d -p 4010:4010 \
   -v ./fixtures:/fixtures \
   ghcr.io/copilotkit/aimock \
-  npx aimock --fixtures /fixtures \
+  npx @copilotkit/aimock --fixtures /fixtures \
   --record \
   --provider-openai https://api.openai.com \
   --provider-anthropic https://api.anthropic.com</code></pre>
@@ -371,10 +371,10 @@
                 Record then replay <span class="lang-tag">shell</span>
               </div>
               <pre><code># First run: record real API responses
-$ npx aimock --record --provider-openai https://api.openai.com -f ./fixtures
+$ npx @copilotkit/aimock --record --provider-openai https://api.openai.com -f ./fixtures
 
 # Subsequent runs: replay from recorded fixtures
-$ npx aimock -f ./fixtures</code></pre>
+$ npx @copilotkit/aimock -f ./fixtures</code></pre>
             </div>
           </div>
           <div class="tab-docker">
@@ -386,13 +386,13 @@ $ npx aimock -f ./fixtures</code></pre>
 $ docker run -d -p 4010:4010 \
   -v ./fixtures:/fixtures \
   ghcr.io/copilotkit/aimock \
-  npx aimock --record --provider-openai https://api.openai.com -f /fixtures
+  npx @copilotkit/aimock --record --provider-openai https://api.openai.com -f /fixtures
 
 # Subsequent runs: replay from recorded fixtures
 $ docker run -d -p 4010:4010 \
   -v ./fixtures:/fixtures \
   ghcr.io/copilotkit/aimock \
-  npx aimock -f /fixtures</code></pre>
+  npx @copilotkit/aimock -f /fixtures</code></pre>
             </div>
           </div>
         </div>
@@ -413,7 +413,7 @@ $ docker run -d -p 4010:4010 \
       -v ./fixtures:/fixtures \
       -p 4010:4010 \
       ghcr.io/copilotkit/aimock \
-      npx aimock --strict -f /fixtures
+      npx @copilotkit/aimock --strict -f /fixtures
 
 - name: Run tests
   env:
@@ -494,7 +494,7 @@ await mock.start();</code></pre>
             Any language, one server <span class="lang-tag">bash</span>
           </div>
           <pre><code># Docker image serves all languages
-docker run -d -p 4010:4010 ghcr.io/copilotkit/aimock npx aimock -f /fixtures
+docker run -d -p 4010:4010 -v ./fixtures:/fixtures ghcr.io/copilotkit/aimock -f /fixtures
 
 # Python
 import openai

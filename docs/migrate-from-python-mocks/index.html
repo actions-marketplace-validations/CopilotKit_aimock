@@ -193,10 +193,11 @@
         <div class="info-box">
           <p>
             <strong>Two paths for Python teams.</strong> If you have Node.js available,
-            <code>npx aimock</code> starts a mock server in one command &mdash; no Docker needed.
-            The <code>aimock-pytest</code> pip package is in development to provide native pytest
-            fixture integration with automatic server lifecycle management. For Docker-based CI
-            environments, the <code>ghcr.io/copilotkit/aimock</code> image works with any language.
+            <code>npx @copilotkit/aimock</code> starts a mock server in one command &mdash; no
+            Docker needed. The <code>aimock-pytest</code> pip package is in development to provide
+            native pytest fixture integration with automatic server lifecycle management. For
+            Docker-based CI environments, the <code>ghcr.io/copilotkit/aimock</code> image works
+            with any language.
           </p>
         </div>
 
@@ -435,7 +436,7 @@
                 Install &amp; run <span class="lang-tag">sh</span>
               </div>
               <pre><code><span class="cm"># Run the mock server (requires Node.js)</span>
-npx aimock -p <span class="num">4010</span> -f ./fixtures
+npx @copilotkit/aimock -p <span class="num">4010</span> -f ./fixtures
 
 <span class="cm"># Point your Python app at the mock</span>
 <span class="kw">export</span> OPENAI_BASE_URL=http://localhost:4010/v1
@@ -478,7 +479,7 @@ pytest</code></pre>
         <h2>Alternative: npx fixture (no Docker)</h2>
         <p>
           If Node.js is available in your environment, you can skip Docker entirely and use
-          <code>npx aimock</code> directly from your <code>conftest.py</code>.
+          <code>npx @copilotkit/aimock</code> directly from your <code>conftest.py</code>.
         </p>
 
         <div class="code-block">

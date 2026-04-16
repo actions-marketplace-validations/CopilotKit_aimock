@@ -37,7 +37,7 @@ aimock mocks everything your AI app talks to:
 | **VectorMock** | Pinecone, Qdrant, ChromaDB compatible endpoints                   | [Vector](https://aimock.copilotkit.dev/vector-mock) |
 | **Services**   | Tavily search, Cohere rerank, OpenAI moderation                   | [Services](https://aimock.copilotkit.dev/services)  |
 
-Run them all on one port with `npx aimock --config aimock.json`, or use the programmatic API to compose exactly what you need.
+Run them all on one port with `npx @copilotkit/aimock --config aimock.json`, or use the programmatic API to compose exactly what you need.
 
 ## Features
 
@@ -73,17 +73,17 @@ See the [GitHub Action docs](https://aimock.copilotkit.dev/github-action) for al
 
 ```bash
 # LLM mocking only
-npx aimock -p 4010 -f ./fixtures
+npx @copilotkit/aimock -p 4010 -f ./fixtures
 
 # Full suite from config
-npx aimock --config aimock.json
+npx @copilotkit/aimock --config aimock.json
 
 # Record mode: proxy to real APIs, save fixtures
-npx aimock --record --provider-openai https://api.openai.com
+npx @copilotkit/aimock --record --provider-openai https://api.openai.com
 
 # Convert fixtures from other tools
-npx aimock convert vidaimock ./templates/ ./fixtures/
-npx aimock convert mockllm ./config.yaml ./fixtures/
+npx @copilotkit/aimock convert vidaimock ./templates/ ./fixtures/
+npx @copilotkit/aimock convert mockllm ./config.yaml ./fixtures/
 
 # Docker
 docker run -d -p 4010:4010 -v ./fixtures:/fixtures ghcr.io/copilotkit/aimock -f /fixtures

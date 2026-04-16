@@ -217,7 +217,7 @@
               <div class="code-block-header">
                 CLI chaos flags <span class="lang-tag">shell</span>
               </div>
-              <pre><code>$ npx aimock --fixtures ./fixtures \
+              <pre><code>$ npx @copilotkit/aimock --fixtures ./fixtures \
   --chaos-drop 0.1 \
   --chaos-malformed 0.05 \
   --chaos-disconnect 0.02</code></pre>
@@ -231,7 +231,7 @@
               <pre><code>$ docker run -d -p 4010:4010 \
   -v ./fixtures:/fixtures \
   ghcr.io/copilotkit/aimock \
-  npx aimock --fixtures /fixtures \
+  npx @copilotkit/aimock --fixtures /fixtures \
   --chaos-drop 0.1 \
   --chaos-malformed 0.05 \
   --chaos-disconnect 0.02</code></pre>

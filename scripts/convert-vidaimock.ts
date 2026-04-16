@@ -7,7 +7,7 @@
  *   npx tsx scripts/convert-vidaimock.ts <input-path> [output-path]
  *
  * Core logic lives in src/convert-vidaimock.ts — this script is a thin CLI
- * wrapper. Prefer `npx aimock convert vidaimock` instead.
+ * wrapper. Prefer `npx @copilotkit/aimock convert vidaimock` instead.
  */
 
 import { writeFileSync, statSync } from "node:fs";
