@@ -70,6 +70,7 @@
         { label: "LlamaIndex", href: "/integrate-llamaindex" },
         { label: "Mastra", href: "/integrate-mastra" },
         { label: "Google ADK", href: "/integrate-adk" },
+        { label: "Microsoft Agent Framework", href: "/integrate-maf" },
       ],
     },
     {
