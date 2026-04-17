@@ -1,5 +1,16 @@
 # @copilotkit/aimock
 
+## 1.14.3
+
+### Added
+
+- Microsoft Agent Framework (MAF) integration guide with Python and .NET examples.
+- Generic `.code-tabs` language switcher with cross-section sync and localStorage persistence.
+
+### Changed
+
+- Updated Claude model references from `claude-sonnet-4-20250514` (retiring 2026-06-15) to `claude-sonnet-4-6`.
+
 ## 1.14.2
 
 ### Fixed
